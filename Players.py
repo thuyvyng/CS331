@@ -45,9 +45,6 @@ class MinimaxPlayer(Player):
 
     def get_move(self,board):
         valid_moves = board.actions(self.symbol)
-        return self.mini_max(board,valid_moves)
-    
-    def mini_max(self, board, valid_moves):
         max = float('-inf')
 
         for cols, rows in valid_moves:
@@ -55,7 +52,15 @@ class MinimaxPlayer(Player):
             temp_board.play_move(cols, rows, self.symbol)
 
             utility_value = self.min_value(temp_board)
-        return (cols,rows)
+            if utility_value > max:
+                max = utility_value
+                best_col = cols
+                best_row = rows
+
+        if max == float('-inf'):
+            print("where does this come from")
+            return cols, rows
+        return (best_col,best_row)
 
     def max_value(self,board):
         if (board.has_legal_moves_remaining('X') == False) and (board.has_legal_moves_remaining('0') == False):
@@ -63,12 +68,17 @@ class MinimaxPlayer(Player):
 
         v = float('-inf')
         possible_moves = board.actions(self.symbol)
-        for col, row in possible_moves:
-            temp_board = board.cloneOBoard()
-            temp_board.play_move(col, row, self.symbol)
-            utility_value = self.max_value(temp_board)
+        if len(possible_moves) == 0:
+            utility_value = self.min_value(board)
             if utility_value > v:
                 v = utility_value
+        else:
+            for col, row in possible_moves:
+                temp_board = board.cloneOBoard()
+                temp_board.play_move(col, row, self.symbol)
+                utility_value = self.min_value(temp_board)
+                if utility_value > v:
+                    v = utility_value
         return v
 
         
@@ -76,15 +86,19 @@ class MinimaxPlayer(Player):
         if (board.has_legal_moves_remaining('X') == False) and (board.has_legal_moves_remaining('0') == False):
             return board.count_score(self.symbol) - board.count_score(self.oppSym) 
     
-
         v = float('inf')
         possible_moves = board.actions(self.oppSym)
-        for col, row in possible_moves:
-            temp_board = board.cloneOBoard()
-            temp_board.play_move(col, row, self.oppSym)
-            utility_value = self.max_value(temp_board)
+        if len(possible_moves) == 0:
+            utility_value = self.max_value(board)
             if utility_value < v:
                 v = utility_value
+        else:
+            for col, row in possible_moves:
+                temp_board = board.cloneOBoard()
+                temp_board.play_move(col, row, self.oppSym)
+                utility_value = self.max_value(temp_board)
+                if utility_value < v:
+                    v = utility_value
         return v
 
 
