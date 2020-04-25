@@ -19,7 +19,7 @@ class OthelloBoard(Board):
     def cloneOBoard(self):
         tmp = OthelloBoard(self.cols, self.rows, self.p1_symbol, self.p2_symbol)
         tmp.grid = copy.deepcopy(self.grid)
-        return tmp;
+        return tmp
 
     def initialize(self):
         self.set_cell(self.cols //2 -1, self.rows //2 -1,   self.p1_symbol)
@@ -72,7 +72,6 @@ class OthelloBoard(Board):
                     return self.check_endpoint(next_col, next_row, symbol, d, not match_symbol)
 
     def is_legal_move(self, col, row, symbol):
-        result = False
         if(not self.is_in_bounds(col, row) or not self.is_cell_empty(col, row)):
             return False
         for d in Direction: #enum from board.py
@@ -83,7 +82,7 @@ class OthelloBoard(Board):
         
     def flip_pieces_helper(self, col, row, symbol, d):
         if(self.get_cell(col, row) == symbol):
-            return 0;
+            return 0
         else:
             self.set_cell(col,row, symbol)
             (next_col, next_row) = self.set_coords_in_direction(col, row, d)
@@ -95,11 +94,11 @@ class OthelloBoard(Board):
         pieces_flipped = 0
         if(not self.is_in_bounds(col, row)):
             print("Flip Pieces bad params.")
-            exit();
+            exit()
         for d in Direction:
             (next_col, next_row) = self.set_coords_in_direction(col,row,d)
             if(self.check_endpoint(next_col, next_row, symbol, d, False)):
-                pieces_flipped += self.flip_pieces_helper(next_col, next_row, symbol, d);
+                pieces_flipped += self.flip_pieces_helper(next_col, next_row, symbol, d)
 
         return pieces_flipped
 
@@ -108,7 +107,7 @@ class OthelloBoard(Board):
             for r in range (0, self.rows):
                 if self.is_cell_empty(c, r) and self.is_legal_move(c, r, symbol):
                     return True
-        return False;
+        return False
 
     def count_score(self, symbol):
         score = 0
@@ -117,6 +116,14 @@ class OthelloBoard(Board):
                 if self.grid[c][r] == symbol:
                     score+=1
         return score
+
+    def actions(self, symbol):
+        possible_moves = []
+        for rows in range(4):
+            for cols in range(4):
+                if self.is_legal_move(cols, rows,symbol):
+                    possible_moves.append((cols, rows))
+        return possible_moves
 
     def play_move(self, col, row, symbol):
         self.set_cell(col, row, symbol)

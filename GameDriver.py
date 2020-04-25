@@ -32,7 +32,7 @@ class GameDriver:
             exit(-1)
 
         self.board = OthelloBoard.OthelloBoard(num_rows, num_cols, self.p1.symbol, self.p2.symbol)
-        self.board.initialize();
+        self.board.initialize()
 
     def display(self):
         print("Player 1 (", self.p1.symbol, ") score: ", \
@@ -47,13 +47,13 @@ class GameDriver:
             else:
                 print("Move:", [col,row], "\n")
                 self.board.play_move(col,row,curr_player.symbol)
-                return;
+                return
 
 
     def run(self):
         current = self.p1
         opponent = self.p2
-        self.board.display();
+        self.board.display()
 
         cant_move_counter, toggle = 0, 0
 
@@ -62,7 +62,7 @@ class GameDriver:
         while True:
             if self.board.has_legal_moves_remaining(current.symbol):
                 cant_move_counter = 0
-                self.process_move(current, opponent);
+                self.process_move(current, opponent)
                 self.board.display()
             else:
                 print("Can't move")
@@ -94,7 +94,7 @@ def main():
         print("Usage: python3 GameDriver.py <player1 type> <player2 type>")
         exit(1)
     game = GameDriver(sys.argv[1], sys.argv[2], 4, 4)
-    game.run();
+    game.run()
     return 0
 
 
