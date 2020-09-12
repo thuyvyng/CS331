@@ -6,4 +6,5 @@ python3 GameDriver.py <playertype> <playertype>
 
 Player Types:
 > Minimax for AI
+> 
 > Human for manual input
